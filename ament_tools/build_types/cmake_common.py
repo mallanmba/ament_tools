@@ -18,6 +18,7 @@ import subprocess
 
 from osrf_pycommon.process_utils import which
 
+
 def which_cmake_executable():
     '''look for CMAKE_COMMAND env var and cmake3 before cmake
     for systems that have both 2.x and 3.x installed
@@ -26,6 +27,7 @@ def which_cmake_executable():
     if executable is None:
         executable = which('cmake')
     return executable
+
 
 def which_ctest_executable():
     executable = which(os.getenv("CTEST_COMMAND", 'ctest3'))
@@ -84,4 +86,3 @@ def project_file_exists_at(path, target):
 def get_visual_studio_version():
     vsv = os.environ.get('VisualStudioVersion', None)
     return vsv
-
