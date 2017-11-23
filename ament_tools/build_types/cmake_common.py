@@ -18,8 +18,24 @@ import subprocess
 
 from osrf_pycommon.process_utils import which
 
-CMAKE_EXECUTABLE = which('cmake')
-CTEST_EXECUTABLE = which('ctest')
+def which_cmake_executable():
+    '''look for CMAKE_COMMAND env var and cmake3 before cmake
+    for systems that have both 2.x and 3.x installed
+    '''
+    executable = which(os.getenv("CMAKE_COMMAND", 'cmake3'))
+    if executable is None:
+        executable = which('cmake')
+    return executable
+
+def which_ctest_executable():
+    executable = which(os.getenv("CTEST_COMMAND", 'ctest3'))
+    if executable is None:
+        executable = which('ctest')
+    return executable
+
+
+CMAKE_EXECUTABLE = which_cmake_executable()
+CTEST_EXECUTABLE = which_ctest_executable()
 MAKE_EXECUTABLE = which('make')
 MSBUILD_EXECUTABLE = which('msbuild')
 NINJA_EXECUTABLE = which('ninja')
@@ -68,3 +84,4 @@ def project_file_exists_at(path, target):
 def get_visual_studio_version():
     vsv = os.environ.get('VisualStudioVersion', None)
     return vsv
+
