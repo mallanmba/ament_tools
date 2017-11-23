@@ -19,10 +19,9 @@ import subprocess
 from osrf_pycommon.process_utils import which
 
 
+# look for CMAKE_COMMAND env var and cmake3 before cmake
+# for systems that have both 2.x and 3.x installed
 def which_cmake_executable():
-    '''look for CMAKE_COMMAND env var and cmake3 before cmake
-    for systems that have both 2.x and 3.x installed
-    '''
     executable = which(os.getenv("CMAKE_COMMAND", 'cmake3'))
     if executable is None:
         executable = which('cmake')
