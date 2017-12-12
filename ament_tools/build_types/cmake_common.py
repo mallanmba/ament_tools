@@ -18,25 +18,25 @@ import subprocess
 
 from osrf_pycommon.process_utils import which
 
-
-# look for CMAKE_COMMAND env var and cmake3 before cmake
-# for systems that have both 2.x and 3.x installed
-def which_cmake_executable():
-    executable = which(os.getenv("CMAKE_COMMAND", 'cmake3'))
-    if executable is None:
-        executable = which('cmake')
-    return executable
+CMAKE_EXECUTABLE_ENV = 'CMAKE_COMMAND'
+CTEST_EXECUTABLE_ENV = 'CTEST_COMMAND'
 
 
-def which_ctest_executable():
-    executable = which(os.getenv("CTEST_COMMAND", 'ctest3'))
-    if executable is None:
-        executable = which('ctest')
-    return executable
+def which_executable(env_var, executable_names):
+    env_value = os.getenv(env_var)
+    if env_value:
+        executable = which(env_value)
+        if executable:
+            return executable
+    for executable_name in executable_names:
+        executable = which(executable_name)
+        if executable:
+            return executable
+    return None
 
 
-CMAKE_EXECUTABLE = which_cmake_executable()
-CTEST_EXECUTABLE = which_ctest_executable()
+CMAKE_EXECUTABLE = which_executable(CMAKE_EXECUTABLE_ENV, ['cmake3', 'cmake'])
+CTEST_EXECUTABLE = which_executable(CTEST_EXECUTABLE_ENV, ['ctest3', 'ctest'])
 MAKE_EXECUTABLE = which('make')
 MSBUILD_EXECUTABLE = which('msbuild')
 NINJA_EXECUTABLE = which('ninja')
